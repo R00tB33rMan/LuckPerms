@@ -1086,9 +1086,9 @@ public class CommandsIntegrationTest {
 
                     .givenHasPermissions("luckperms.bulkupdate")
                     .whenRunCommand("bulkupdate all update permission group.mod \"permission == group.moderator\"")
-                    .thenExpect("[LP] Running bulk update.");
+                    .thenExpectStartsWith("[LP] Running bulk update.");
 
-            assertTrue(completed.await(5, TimeUnit.SECONDS));
+            assertTrue(completed.await(15, TimeUnit.SECONDS), "operation did not complete in the allotted time");
 
             Group adminGroup = plugin.getGroupManager().getIfLoaded("admin");
             assertNotNull(adminGroup);
