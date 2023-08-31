@@ -36,7 +36,6 @@ import me.lucko.luckperms.common.plugin.scheduler.JavaSchedulerAdapter;
 import me.lucko.luckperms.common.plugin.scheduler.SchedulerAdapter;
 import me.lucko.luckperms.standalone.app.LuckPermsApplication;
 import net.luckperms.api.platform.Platform;
-import org.jetbrains.annotations.VisibleForTesting;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -71,7 +70,7 @@ public class LPStandaloneBootstrap implements LuckPermsBootstrap, LoaderBootstra
         this.plugin = new LPStandalonePlugin(this);
     }
 
-    @VisibleForTesting
+    // visible for testing
     protected LPStandaloneBootstrap(LuckPermsApplication loader, ClassPathAppender classPathAppender) {
         this.loader = loader;
 
@@ -81,7 +80,7 @@ public class LPStandaloneBootstrap implements LuckPermsBootstrap, LoaderBootstra
         this.plugin = createTestPlugin();
     }
 
-    @VisibleForTesting
+    // visible for testing
     protected LPStandalonePlugin createTestPlugin() {
         return new LPStandalonePlugin(this);
     }
