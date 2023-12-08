@@ -23,43 +23,28 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.common.node.matcher;
+package me.lucko.luckperms.common.bulkupdate.action;
 
-import me.lucko.luckperms.common.filter.Comparison;
-import me.lucko.luckperms.common.filter.Constraint;
-import me.lucko.luckperms.common.filter.ConstraintFactory;
 import net.luckperms.api.node.Node;
-import net.luckperms.api.node.matcher.NodeMatcher;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Abstract implementation of {@link NodeMatcher} backed by a {@link Constraint}.
+ * Represents an action to be applied to a given node.
  */
-public abstract class ConstraintNodeMatcher<T extends Node> implements NodeMatcher<T> {
-    private final Constraint<String> constraint;
+public interface BulkUpdateAction {
 
-    protected ConstraintNodeMatcher(Comparison comparison, String value) {
-        this.constraint = ConstraintFactory.STRINGS.build(comparison, value);
-    }
+    /**
+     * Gets the name of this action
+     *
+     * @return the name of the action
+     */
+    String getName();
 
-    public Constraint<String> getConstraint() {
-        return this.constraint;
-    }
+    /**
+     * Applies this action to the given NodeModel, and returns the result.
+     *
+     * @param from the node to base changes from
+     * @return the new node instance, or null if the node should be deleted.
+     */
+    Node apply(Node from);
 
-    public abstract @Nullable T filterConstraintMatch(@NonNull Node node);
-
-    public @Nullable T match(Node node) {
-        return getConstraint().evaluate(node.getKey()) ? filterConstraintMatch(node) : null;
-    }
-
-    @Override
-    public boolean test(@NonNull Node node) {
-        return match(node) != null;
-    }
-
-    @Override
-    public String toString() {
-        return this.constraint.toString();
-    }
 }

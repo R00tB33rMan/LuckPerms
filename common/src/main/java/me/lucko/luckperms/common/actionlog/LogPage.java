@@ -23,38 +23,48 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.common.bulkupdate.action;
+package me.lucko.luckperms.common.actionlog;
 
-import me.lucko.luckperms.common.bulkupdate.PreparedStatementBuilder;
-import net.luckperms.api.node.Node;
+import com.google.common.collect.ImmutableList;
 
-/**
- * Represents an action to be applied to a given node.
- */
-public interface Action {
+import java.util.ArrayList;
+import java.util.List;
 
-    /**
-     * Gets the name of this action
-     *
-     * @return the name of the action
-     */
-    String getName();
+public class LogPage {
+    private static final LogPage EMPTY = new LogPage(ImmutableList.of());
 
-    /**
-     * Applies this action to the given NodeModel, and returns the result.
-     *
-     * @param from the node to base changes from
-     * @return the new nodemodel instance, or null if the node should be deleted.
-     */
-    Node apply(Node from);
+    public static LogPage.Builder builder() {
+        return new LogPage.Builder();
+    }
 
-    /**
-     * Gets this action in SQL form.
-     *
-     * Will include a placeholder for the table, as "{table}".
-     *
-     * @param builder the statement builder
-     */
-    void appendSql(PreparedStatementBuilder builder);
+    public static LogPage empty() {
+        return EMPTY;
+    }
+
+    private final List<LoggedAction> content;
+
+    LogPage(List<LoggedAction> content) {
+        this.content = ImmutableList.copyOf(content);
+    }
+
+    public List<LoggedAction> getContent() {
+        return this.content;
+    }
+
+    public static class Builder {
+        private final List<LoggedAction> content = new ArrayList<>();
+
+        public Builder add(LoggedAction e) {
+            this.content.add(e);
+            return this;
+        }
+
+        public LogPage build() {
+            if (this.content.isEmpty()) {
+                return EMPTY;
+            }
+            return new LogPage(this.content);
+        }
+    }
 
 }

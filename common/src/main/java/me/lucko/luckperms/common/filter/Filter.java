@@ -23,34 +23,37 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.common.bulkupdate.query;
+package me.lucko.luckperms.common.filter;
 
-import java.util.Locale;
+public class Filter<T, FT> {
+    private final FilterField<T, FT> field;
+    private final Constraint<FT> constraint;
 
-/**
- * Represents a field being used in an update
- */
-public enum QueryField {
-
-    PERMISSION("permission"),
-    SERVER("server"),
-    WORLD("world");
-
-    private final String sqlName;
-
-    public static QueryField of(String s) {
-        try {
-            return valueOf(s.toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+    public Filter(FilterField<T, FT> field, Constraint<FT> constraint) {
+        this.field = field;
+        this.constraint = constraint;
     }
 
-    QueryField(String sqlName) {
-        this.sqlName = sqlName;
+    public final FilterField<T, FT> field() {
+        return this.field;
     }
 
-    public String getSqlName() {
-        return this.sqlName;
+    public final Constraint<FT> constraint() {
+        return this.constraint;
+    }
+
+    /**
+     * Returns if the given value satisfies this filter
+     *
+     * @param value the value
+     * @return true if satisfied
+     */
+    public boolean evaluate(T value) {
+        return this.constraint.evaluate(this.field.getValue(value));
+    }
+
+    @Override
+    public String toString() {
+        return this.field + " " + this.constraint;
     }
 }

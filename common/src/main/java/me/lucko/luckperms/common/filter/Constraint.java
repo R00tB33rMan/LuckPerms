@@ -23,48 +23,42 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.common.bulkupdate.comparison;
+package me.lucko.luckperms.common.filter;
 
-import me.lucko.luckperms.common.bulkupdate.PreparedStatementBuilder;
+import java.util.function.Predicate;
 
-/**
- * A method of comparing two strings
- */
-public interface Comparison {
+public class Constraint<T> {
 
-    /**
-     * Gets the symbol which represents this comparison
-     *
-     * @return the comparison symbol
-     */
-    String getSymbol();
+    private final Comparison comparison;
+    private final T value;
+    private final Predicate<T> predicate;
 
-    /**
-     * Creates a {@link CompiledExpression} for the given expression
-     *
-     * @param expression the expression
-     * @return the compiled expression
-     */
-    CompiledExpression compile(String expression);
-
-    /**
-     * Returns the comparison operator in SQL form
-     */
-    void appendSql(PreparedStatementBuilder builder);
-
-    /**
-     * An instance of {@link Comparison} which is bound to an expression.
-     */
-    interface CompiledExpression {
-
-        /**
-         * Tests the expression against a given string, according to the
-         * rules of the parent {@link Comparison}.
-         *
-         * @param string the string
-         * @return if there was a match
-         */
-        boolean test(String string);
+    Constraint(Comparison comparison, T value, Predicate<T> predicate) {
+        this.comparison = comparison;
+        this.value = value;
+        this.predicate = predicate;
     }
 
+    public Comparison comparison() {
+        return this.comparison;
+    }
+
+    public T value() {
+        return this.value;
+    }
+
+    /**
+     * Returns if the given value satisfies this constraint
+     *
+     * @param value the value
+     * @return true if satisfied
+     */
+    public boolean evaluate(T value) {
+        return this.predicate.test(value);
+    }
+
+    @Override
+    public String toString() {
+        return this.comparison + " " + this.value;
+    }
 }

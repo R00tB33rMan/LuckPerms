@@ -23,26 +23,24 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.common.bulkupdate.action;
+package me.lucko.luckperms.common.filter;
 
-import net.luckperms.api.node.Node;
+public class PageParameters {
 
-public class DeleteAction implements BulkUpdateAction {
+    private final int pageSize;
+    private final int pageNumber;
 
-    public static DeleteAction create() {
-        return new DeleteAction();
+    public PageParameters(int pageSize, int pageNumber) {
+        this.pageSize = pageSize;
+        this.pageNumber = pageNumber;
     }
 
-    private DeleteAction() {
+    public int pageSize() {
+        return this.pageSize;
     }
 
-    @Override
-    public String getName() {
-        return "delete";
+    public int pageNumber() {
+        return this.pageNumber;
     }
 
-    @Override
-    public Node apply(Node from) {
-        return null; // this action just deletes nodes, so return null
-    }
 }
