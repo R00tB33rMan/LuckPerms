@@ -1,14 +1,6 @@
 name: Build Gradle and Publish Docker image
 
-on:
-  push:
-    branches:
-      - 'master'
-    tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - 'master'
+on: [ push ]
 
 env:
   REGISTRY: ghcr.io
