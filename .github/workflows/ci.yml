@@ -46,7 +46,7 @@ jobs:
           detailed_summary: true
 
       - name: Upload all artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jars
           path: |
@@ -61,7 +61,7 @@ jobs:
             standalone/loader/build/libs/LuckPerms-Standalone-*.jar
 
       - name: Upload standalone artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: standalone-binary
           path: standalone/loader/build/libs/LuckPerms-Standalone-*.jar
